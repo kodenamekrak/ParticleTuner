@@ -1,0 +1,56 @@
+{
+  "sharedDir": "shared",
+  "dependenciesDir": "extern",
+  "info": {
+    "name": "ParticleTuner",
+    "id": "particletuner",
+    "version": "0.1.0",
+    "url": null,
+    "additionalData": {
+      "overrideSoName": "libparticletuner.so",
+      "cmake": true
+    }
+  },
+  "dependencies": [
+    {
+      "id": "beatsaber-hook",
+      "versionRange": "^3.14.0",
+      "additionalData": {
+        "extraFiles": [
+          "src/inline-hook"
+        ]
+      }
+    },
+    {
+      "id": "modloader",
+      "versionRange": "=1.2.3",
+      "additionalData": {}
+    },
+    {
+      "id": "config-utils",
+      "versionRange": "^1.0.2",
+      "additionalData": {}
+    },
+    {
+      "id": "codegen",
+      "versionRange": "^0.32.0",
+      "additionalData": {}
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.15.22",
+      "additionalData": {}
+    },
+    {
+      "id": "sombrero",
+      "versionRange": "^0.1.37",
+      "additionalData": {}
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.3.0",
+      "additionalData": {}
+    }
+  ],
+  "workspace": null
+}
