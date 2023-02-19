@@ -1,5 +1,11 @@
-<vertical id="vertical" xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-                               xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
-    <increment-setting text='TestIncrement' value='sparkleTest' min='0' max='100' increment='0.1'
-        integer-only='false' apply-on-change='true' hover-hint='joe mama' />
-</vertical>
+<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
+    <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
+        <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
+            <vertical horizontal-fit='PreferredSize' preferred-width='50.0' vertical-fit='PreferredSize' preferred-height='60.0' pad='4.0' bg='round-rect-panel'>
+            </vertical>
+            <vertical horizontal-fit='PreferredSize' preferred-width='100.0' vertical-fit='PreferredSize' preferred-height='45.0' ad='4.0' bg='round-rect-panel'>
+            </vertical>
+        </horizontal>
+    </vertical>
+</bg>
