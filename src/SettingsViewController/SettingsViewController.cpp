@@ -16,6 +16,12 @@ namespace ParticleTuner {
         getLogger().info("Parsed BSML!");
     }
 
-    float SettingsViewController::get_sparkleTest() { return getModConfig().SparkleMultiplier.GetValue(); }
-    void SettingsViewController::set_sparkleTest(float value) { getModConfig().SparkleMultiplier.SetValue(value); }
+    float SettingsViewController::get_SparklesMultiplier() { return getModConfig().SparkleMultiplier.GetValue(); }
+    void SettingsViewController::set_SparklesMultiplier(float value) { getModConfig().SparkleMultiplier.SetValue(value); }
+    float SettingsViewController::get_ExplosionsMultiplier() { return getModConfig().ExplosionMultiplier.GetValue(); }
+    void SettingsViewController::set_ExplosionsMultiplier(float value) { getModConfig().ExplosionMultiplier.GetValue(); }
+    float SettingsViewController::get_LifetimeMultiplier() { return getModConfig().SparkleLifetimeMultiplier.GetValue(); }
+    void SettingsViewController::set_LifetimeMultiplier(float value) { getModConfig().SparkleLifetimeMultiplier.SetValue(value); }
+    float SettingsViewController::get_ParticleOpacity() { return getModConfig().ParticleOpacity.GetValue(); }
+    void SettingsViewController::set_ParticleOpacity(float value) { getModConfig().ParticleOpacity.SetValue(value); }
 }

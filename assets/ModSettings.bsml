@@ -2,9 +2,17 @@
     xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
     <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
         <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
-            <vertical horizontal-fit='PreferredSize' preferred-width='50.0' vertical-fit='PreferredSize' preferred-height='60.0' pad='4.0' bg='round-rect-panel'>
+            <vertical horizontal-fit='PreferredSize' preferred-width='60.0' vertical-fit='Unconstrained' pad='4.0' bg='round-rect-panel'>
             </vertical>
-            <vertical horizontal-fit='PreferredSize' preferred-width='100.0' vertical-fit='PreferredSize' preferred-height='45.0' ad='4.0' bg='round-rect-panel'>
+            <vertical horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='60.0' spacing='4.0'>
+                <vertical horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='48.0' bg='round-rect-panel' spacing='4.0' pad='4.0' child-align='MiddleCenter' child-expand-width='false' child-expand-height='false'>
+                    <increment-setting preferred-width='100.0' text='Sparkles Multiplier' value='SparklesMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                    <increment-setting preferred-width='100.0' text='Explosions Multiplier' value='ExplosionsMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                    <increment-setting preferred-width='100.0' text='Lifetime Multiplier' value='LifetimeMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                    <increment-setting preferred-width='100.0' text='Particle Opacity' value='ParticleOpacity' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                </vertical>
+                <horizontal horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='8.0' bg='round-rect-panel' pad='2.0' spacing='4.0'>
+                </horizontal>
             </vertical>
         </horizontal>
     </vertical>
