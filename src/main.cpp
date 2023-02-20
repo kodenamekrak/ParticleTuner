@@ -1,11 +1,13 @@
 #include "main.hpp"
 #include "ModConfig.hpp"
 #include "SettingsViewController/UIManager.hpp"
+#include "Dust.hpp"
 
 #include "GlobalNamespace/NoteCutParticlesEffect.hpp"
+#include "GlobalNamespace/BombExplosionEffect.hpp"
+#include "GlobalNamespace/SaberClashEffect.hpp"
 
 #include "UnityEngine/Color32.hpp"
-#include "UnityEngine/Color.hpp"
 #include "UnityEngine/ParticleSystem.hpp"
 #include "UnityEngine/ParticleSystem_MainModule.hpp"
 
@@ -29,28 +31,50 @@ UnityEngine::Color32 RandomColorGen()
     return UnityEngine::Color32(color.r * 255, color.g * 255, color.b * 255);
 }
 
+MAKE_HOOK_MATCH(SceneManager_SetActiveScene, &UnityEngine::SceneManagement::SceneManager::SetActiveScene, bool, UnityEngine::SceneManagement::Scene newActiveScene)
+{
+    bool result = SceneManager_SetActiveScene(newActiveScene);
+
+    std::string sceneName = newActiveScene.get_name();
+
+    if((sceneName == "MainMenu" || sceneName == "GameCore" ) && getModConfig().ReducedDustParticles.GetValue())
+    {
+        
+    }
+    
+    return result;
+}
+
+MAKE_HOOK_MATCH(BombExplosionEffect_SpawnExplosion, &GlobalNamespace::BombExplosionEffect::SpawnExplosion, void, GlobalNamespace::BombExplosionEffect* self, UnityEngine::Vector3 pos)
+{
+    if(getModConfig().ReducedBombCutEffects.GetValue())
+    {
+        self->debrisCount = 0;
+        self->explosionParticlesCount = 0;
+    }
+
+    BombExplosionEffect_SpawnExplosion(self, pos);
+}
+
 MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCutParticlesEffect::SpawnParticles, void, GlobalNamespace::NoteCutParticlesEffect* self, UnityEngine::Vector3 cutPoint, UnityEngine::Vector3 cutNormal, UnityEngine::Vector3 saberDir, float saberSpeed, UnityEngine::Vector3 noteMovementVec, UnityEngine::Color32 color, int sparkleParticlesCount, int explosionParticlesCount, float lifetimeMultiplier)
 {
-    if(getModConfig().Enabled.GetValue())
+    if(getModConfig().ReducedNoteParticles.GetValue())
     {
-
-        getLogger().info("----PREHOOK----");
-        getLogger().info("sparkleParticlesCount: %i", sparkleParticlesCount);
-        getLogger().info("explosionParticlesCount: %i", explosionParticlesCount);
-        getLogger().info("lifetimeMultiplier: %f", lifetimeMultiplier);
-        getLogger().info("sparkleMaxParticles: %i", self->sparklesPS->get_main().get_maxParticles());
-        getLogger().info("explosionMaxParticles: %i", self->explosionPS->get_main().get_maxParticles());
-
-        sparkleParticlesCount = static_cast<int>(static_cast<float>(getModConfig().SparkleMultiplier.GetValue()) * sparkleParticlesCount);
-        explosionParticlesCount = static_cast<int>(static_cast<float>(getModConfig().ExplosionMultiplier.GetValue()) * explosionParticlesCount);
-        lifetimeMultiplier = getModConfig().SparkleLifetimeMultiplier.GetValue();
+        sparkleParticlesCount = 0;
+        explosionParticlesCount = 0;
+    }
+    else
+    {
+        sparkleParticlesCount = static_cast<int>(static_cast<float>(getModConfig().SparklesMultiplier.GetValue()) * sparkleParticlesCount);
+        explosionParticlesCount = static_cast<int>(static_cast<float>(getModConfig().ExplosionsMultiplier.GetValue()) * explosionParticlesCount);
+        lifetimeMultiplier = getModConfig().SparklesLifetimeMultiplier.GetValue() * 0.5f;
 
         auto sparkleMain = self->sparklesPS->get_main();
         sparkleMain.set_maxParticles(sparkleParticlesCount);
 
         auto explosionMain = self->explosionPS->get_main();
         explosionMain.set_maxParticles(explosionParticlesCount);
-        explosionMain.set_startLifetime(getModConfig().ExplosionLifetimeMultiplier.GetValue() * 0.6f);
+        explosionMain.set_startLifetime(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f);
 
         if(getModConfig().RainbowParticles.GetValue())
         {
@@ -58,16 +82,19 @@ MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCut
         }
         float newOpacity = 255.0f * getModConfig().ParticleOpacity.GetValue();
         color.a = static_cast<uint8_t>(std::clamp(newOpacity, 0.0f, 255.0f));
-
-        getLogger().info("----POSTHOOK----");
-        getLogger().info("sparkleParticlesCount: %i", sparkleParticlesCount);
-        getLogger().info("explosionParticlesCount: %i", explosionParticlesCount);
-        getLogger().info("lifetimeMultiplier: %f", lifetimeMultiplier);
-        getLogger().info("maxParticles: %i", self->sparklesPS->get_main().get_maxParticles());
-        getLogger().info("explosionMaxParticles: %i", self->explosionPS->get_main().get_maxParticles());
     }
 
     NoteCutParticlesEffect_SpawnParticles(self, cutPoint, cutNormal, saberDir, saberSpeed, noteMovementVec, color, sparkleParticlesCount, explosionParticlesCount, lifetimeMultiplier);
+}
+
+MAKE_HOOK_MATCH(SaberClashEffect_Start, &GlobalNamespace::SaberClashEffect::Start, void, GlobalNamespace::SaberClashEffect *self)
+{
+    if(getModConfig().ReducedClashEffects.GetValue())
+    {
+        self->sparkleParticleSystem->get_gameObject()->SetActive(false);
+        self->glowParticleSystem->get_gameObject()->SetActive(false);
+    }
+    SaberClashEffect_Start(self); 
 }
 
 Configuration& getConfig() {
@@ -101,5 +128,8 @@ extern "C" void load() {
 
     getLogger().info("Installing hooks...");
     INSTALL_HOOK(getLogger(), NoteCutParticlesEffect_SpawnParticles);
+    INSTALL_HOOK(getLogger(), BombExplosionEffect_SpawnExplosion);
+    INSTALL_HOOK(getLogger(), SceneManager_SetActiveScene);
+    INSTALL_HOOK(getLogger(), SaberClashEffect_Start);
     getLogger().info("Installed all hooks!");
 }

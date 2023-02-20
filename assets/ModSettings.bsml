@@ -2,16 +2,26 @@
     xsi:noNamespaceSchemaLocation='https://raw.githubusercontent.com/RedBrumbler/Quest-BSML-Docs/gh-pages/schema.xsd'>
     <vertical horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
         <horizontal horizontal-fit='PreferredSize' vertical-fit='PreferredSize' spacing='4.0'>
-            <vertical horizontal-fit='PreferredSize' preferred-width='60.0' vertical-fit='Unconstrained' pad='4.0' bg='round-rect-panel'>
+            <vertical horizontal-fit='PreferredSize' preferred-width='60.0' vertical-fit='Unconstrained' spacing='4.0' pad='4.0' bg='round-rect-panel' bg-alpha='0.7' child-align='MiddleCenter' child-expand-width='false' child-expand-height='false'>
+                <toggle-setting id='ReduceCoreToggle' preferred-width='50' text='Reduce Core Particles' value='ReducedNoteParticles' apply-on-change='true'/>
+                <toggle-setting id='ReduceBombToggle' preferred-width='50' text='Reduce Bomb Particles' value='ReducedBombCutEffects' apply-on-change='true'/>
+                <toggle-setting id='ReduceClashToggle' preferred-width='50' text='Reduce Clash Effects' value='ReducedClashEffects' apply-on-change='true'/>
+                <toggle-setting id='ReduceDustToggle' preferred-width='50' text='Reduce Dust Particles' value='ReducedDustParticles' apply-on-change='true'/>
+                <toggle-setting id='RainbowToggle' preferred-width='50' text='Rainbow Particles' value='RainbowParticles' apply-on-change='true'/>
             </vertical>
             <vertical horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='60.0' spacing='4.0'>
-                <vertical horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='48.0' bg='round-rect-panel' spacing='4.0' pad='4.0' child-align='MiddleCenter' child-expand-width='false' child-expand-height='false'>
-                    <increment-setting preferred-width='100.0' text='Sparkles Multiplier' value='SparklesMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
-                    <increment-setting preferred-width='100.0' text='Explosions Multiplier' value='ExplosionsMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
-                    <increment-setting preferred-width='100.0' text='Lifetime Multiplier' value='LifetimeMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
-                    <increment-setting preferred-width='100.0' text='Particle Opacity' value='ParticleOpacity' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                <vertical horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='48.0' bg='round-rect-panel' bg-alpha='0.7' spacing='2.0' pad='4.0' child-align='MiddleCenter' child-expand-width='false' child-expand-height='false'>
+                    <increment-setting id='SparklesIncrement' preferred-width='100.0' text='Sparkles Multiplier' value='SparklesMultiplier' increment='0.1' digits='1' min='0.0' max='100.0' apply-on-change='true'/>
+                    <increment-setting id='SparklesLifetimeIncrement' preferred-width='100.0' text='Sparkles Lifetime Multiplier' value='SparklesLifetimeMultiplier' increment='0.1' digits='1' min='0.0' max='10.0' apply-on-change='true'/>
+                    <increment-setting id='ExplosionsIncrement' preferred-width='100.0' text='Explosions Multiplier' value='ExplosionsMultiplier' increment='0.1' digits='1' min='0.0' max='10.0' apply-on-change='true'/>
+                    <increment-setting id='ExplosionsLifetimeIncrement' preferred-width='100.0' text='Explosions Lifetime Multiplier' value='ExplosionsLifetimeMultiplier' increment='0.1' digits='1' min='0.0' max='10.0' apply-on-change='true'/>
+                    <increment-setting id='OpacityIncrement' preferred-width='100.0' text='Particle Opacity' value='ParticleOpacity' increment='0.1' digits='1' min='0.0' max='1.0' apply-on-change='true'/>
                 </vertical>
-                <horizontal horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='8.0' bg='round-rect-panel' pad='2.0' spacing='4.0'>
+                <horizontal horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='8.0' pad='2.0' spacing='4.0' child-expand-width='false'>
+                    <action-button text='None' preferred-width='25.0' on-click='ApplyNone'/>
+                    <action-button text='Normal' preferred-width='25.0' on-click='ApplyNormal'/>
+                    <action-button text='Fantasy' preferred-width='25.0' on-click='ApplyFantasy'/>
+                    <action-button text='Insane' preferred-width='25.0' on-click='ApplyInsane'/>
                 </horizontal>
             </vertical>
         </horizontal>
