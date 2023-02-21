@@ -9,11 +9,11 @@
 DEFINE_TYPE(ParticleTuner, SettingsFlowCoordinator);
 
 namespace ParticleTuner {
-    SettingsViewController* settingsViewController;
-
+    
     void SettingsFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
-        if (!firstActivation) return;
+        if (!firstActivation)
+            return;
         settingsViewController = BSML::Helpers::CreateViewController<ParticleTuner::SettingsViewController *>();
 
         showBackButton = true;

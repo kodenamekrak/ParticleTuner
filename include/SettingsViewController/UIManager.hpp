@@ -13,24 +13,23 @@ namespace ParticleTuner
 {
     class UIManager
     {
-        HMUI::FlowCoordinator *parentFlow;
         ParticleTuner::SettingsFlowCoordinator *flow;
 
         public:
             void Init()
             {
-                BSML::Register::RegisterMenuButton("ParticleTuner", "yes", [this]()
+                BSML::Register::RegisterMenuButton("ParticleTuner", "ParticleTuner", [this]()
                 {
-                    ShowFlow(false);
+                    ShowFlow();
                 });
             }
 
-            void ShowFlow(bool immediately)
+            void ShowFlow()
             {
                 if (flow == nullptr || flow->m_CachedPtr.m_value == nullptr)
                     flow = BSML::Helpers::CreateFlowCoordinator<ParticleTuner::SettingsFlowCoordinator *>();
                 
-                parentFlow = BSML::Helpers::GetMainFlowCoordinator()->YoungestChildFlowCoordinatorOrSelf();
+                auto parentFlow = BSML::Helpers::GetMainFlowCoordinator()->YoungestChildFlowCoordinatorOrSelf();
                 parentFlow->PresentFlowCoordinator(flow, nullptr, HMUI::ViewController::AnimationDirection::Horizontal, HMUI::ViewController::AnimationType::Out, false);
             }
     };

@@ -18,10 +18,10 @@
                     <increment-setting id='OpacityIncrement' preferred-width='100.0' text='Particle Opacity' value='ParticleOpacity' increment='0.1' digits='1' min='0.0' max='1.0' apply-on-change='true'/>
                 </vertical>
                 <horizontal horizontal-fit='PreferredSize' preferred-width='110.0' vertical-fit='PreferredSize' preferred-height='8.0' pad='2.0' spacing='4.0' child-expand-width='false'>
-                    <action-button text='None' preferred-width='25.0' on-click='ApplyNone'/>
-                    <action-button text='Normal' preferred-width='25.0' on-click='ApplyNormal'/>
-                    <action-button text='Fantasy' preferred-width='25.0' on-click='ApplyFantasy'/>
-                    <action-button text='Insane' preferred-width='25.0' on-click='ApplyInsane'/>
+                    <action-button text='None' hover-hint='Disables all particles' preferred-width='25.0' on-click='ApplyNone'/>
+                    <action-button text='Normal' hover-hint='Default settings' preferred-width='25.0' on-click='ApplyNormal'/>
+                    <action-button text='Fantasy' hover-hint='Add a bit of colour to your game' preferred-width='25.0' on-click='ApplyFantasy'/>
+                    <action-button text='Insane' hover-hint='This may cause your game to be extremely laggy' preferred-width='25.0' on-click='ApplyInsane'/>
                 </horizontal>
             </vertical>
         </horizontal>

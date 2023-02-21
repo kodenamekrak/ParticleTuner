@@ -8,16 +8,16 @@
 #include "GlobalNamespace/SaberClashEffect.hpp"
 
 #include "UnityEngine/Color32.hpp"
-#include "UnityEngine/ParticleSystem.hpp"
-#include "UnityEngine/ParticleSystem_MainModule.hpp"
+#include "UnityEngine/SceneManagement/SceneManager.hpp"
+#include "UnityEngine/SceneManagement/Scene.hpp"
 
 #include "sombrero/shared/FastColor.hpp"
 
-#include <iostream>
-#include <cstdlib>
 #include <random>
 
 static ModInfo modInfo;
+
+#define MAX_PARTICLES 2147483647
 
 UnityEngine::Color32 RandomColorGen()
 {
@@ -36,12 +36,10 @@ MAKE_HOOK_MATCH(SceneManager_SetActiveScene, &UnityEngine::SceneManagement::Scen
     bool result = SceneManager_SetActiveScene(newActiveScene);
 
     std::string sceneName = newActiveScene.get_name();
-
     if((sceneName == "MainMenu" || sceneName == "GameCore" ) && getModConfig().ReducedDustParticles.GetValue())
     {
-        
-    }
-    
+        ParticleTuner::Dust::SetDustActive(false);
+    } 
     return result;
 }
 
@@ -70,18 +68,20 @@ MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCut
         lifetimeMultiplier = getModConfig().SparklesLifetimeMultiplier.GetValue() * 0.5f;
 
         auto sparkleMain = self->sparklesPS->get_main();
-        sparkleMain.set_maxParticles(sparkleParticlesCount);
+        sparkleMain.set_maxParticles(MAX_PARTICLES);
 
         auto explosionMain = self->explosionPS->get_main();
-        explosionMain.set_maxParticles(explosionParticlesCount);
+        explosionMain.set_maxParticles(MAX_PARTICLES);
         explosionMain.set_startLifetime(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f);
 
         if(getModConfig().RainbowParticles.GetValue())
         {
             color = RandomColorGen();
         }
-        float newOpacity = 255.0f * getModConfig().ParticleOpacity.GetValue();
-        color.a = static_cast<uint8_t>(std::clamp(newOpacity, 0.0f, 255.0f));
+
+        // Limit at 128 because the colour is just mostly white as you go higher
+        float newOpacity = 128.0f * getModConfig().ParticleOpacity.GetValue();
+        color.a = static_cast<uint8_t>(std::clamp(newOpacity, 0.0f, 128.0f));
     }
 
     NoteCutParticlesEffect_SpawnParticles(self, cutPoint, cutNormal, saberDir, saberSpeed, noteMovementVec, color, sparkleParticlesCount, explosionParticlesCount, lifetimeMultiplier);

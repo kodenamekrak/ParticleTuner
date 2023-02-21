@@ -2,6 +2,7 @@
 #include "SettingsViewController/SettingsViewController.hpp"
 #include "ModConfig.hpp"
 #include "assets.hpp"
+#include "Dust.hpp"
 
 #include "bsml/shared/BSML.hpp"
 
@@ -15,6 +16,8 @@ namespace ParticleTuner {
 
     void SettingsViewController::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
+        if(!firstActivation)
+            return;
         getLogger().info("Parsing BSML to ViewController...");
         BSML::parse_and_construct(IncludedAssets::ModSettings_bsml, get_transform(), this);
         getLogger().info("Parsed BSML!");
@@ -37,6 +40,13 @@ namespace ParticleTuner {
         ReduceBombToggle->set_Value(reducedBombEffects);
         ReduceClashToggle->set_Value(reducedClashEffects);
         ReduceDustToggle->set_Value(reducedDustParticles);
+        Dust::SetDustActive(!reducedDustParticles);
+        RainbowToggle->set_Value(rainbowParticles);
+        SparklesIncrement->set_Value(sparklesMultiplier);
+        SparklesLifetimeIncrement->set_Value(sparklesLifetimeMultiplier);
+        ExplosionsIncrement->set_Value(explosionsMultiplier);
+        ExplosionsLifetimeIncrement->set_Value(explosionsLifetimeMultiplier);
+        OpacityIncrement->set_Value(particleOpacity);
     }
 
     void SettingsViewController::ApplyNone()
@@ -47,7 +57,7 @@ namespace ParticleTuner {
             true,
             true,
             true,
-            true,
+            false,
             0,
             0,
             0,
@@ -102,7 +112,7 @@ namespace ParticleTuner {
             100,
             10,
             10,
-            3,
+            10,
             1
         );
     }
@@ -110,8 +120,10 @@ namespace ParticleTuner {
     DEFINE_BSML_PROPERTY(bool, ReducedNoteParticles);
     DEFINE_BSML_PROPERTY(bool, ReducedBombCutEffects);
     DEFINE_BSML_PROPERTY(bool, ReducedClashEffects);
-    DEFINE_BSML_PROPERTY(bool, ReducedDustParticles);
     DEFINE_BSML_PROPERTY(bool, RainbowParticles);
+
+    bool SettingsViewController::get_ReducedDustParticles() { return getModConfig().ReducedDustParticles.GetValue(); }
+    void SettingsViewController::set_ReducedDustParticles(bool value) { getModConfig().ReducedDustParticles.SetValue(value); Dust::SetDustActive(!value); }
     
     DEFINE_BSML_PROPERTY(float, SparklesMultiplier);
     DEFINE_BSML_PROPERTY(float, SparklesLifetimeMultiplier);

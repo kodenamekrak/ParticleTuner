@@ -4,6 +4,7 @@
   "id": "${mod_id}",
   "author": "KodenameKRAK",
   "version": "${version}",
+  "packageVersion": "1.27.0_3631150051",
   "description": "${mod_id}, version ${version}!",
   "dependencies": [],
   "modFiles": [],
