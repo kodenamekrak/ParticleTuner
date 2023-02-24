@@ -2,8 +2,8 @@
 
 ParticleTuner
 
-Use `qpm-rust s build` to build
-Same goes for `qpm-rust s copy` and `qpm-rust s qmod`
+Use `./build.ps1` to build
+Same goes for `./copy.ps1` and `./createqmod.ps1`
 
 ## Credits
 

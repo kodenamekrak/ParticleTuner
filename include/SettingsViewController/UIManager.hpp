@@ -26,7 +26,7 @@ namespace ParticleTuner
 
             void ShowFlow()
             {
-                if (flow == nullptr || flow->m_CachedPtr.m_value == nullptr)
+                if (!flow || !flow->m_CachedPtr.m_value)
                     flow = BSML::Helpers::CreateFlowCoordinator<ParticleTuner::SettingsFlowCoordinator *>();
                 
                 auto parentFlow = BSML::Helpers::GetMainFlowCoordinator()->YoungestChildFlowCoordinatorOrSelf();
