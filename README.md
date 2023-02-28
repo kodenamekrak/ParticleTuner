@@ -2,6 +2,10 @@
 
 ParticleTuner
 
+Lets you tweak individual particle settings!
+
+![VideoCapture_20230224-134121](https://user-images.githubusercontent.com/106346717/221195318-73b882ea-ebce-462b-aea1-5252f7cce3f7.jpg)
+
 Use `./build.ps1` to build
 Same goes for `./copy.ps1` and `./createqmod.ps1`
 
