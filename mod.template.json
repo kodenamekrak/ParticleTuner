@@ -5,7 +5,7 @@
   "author": "KodenameKRAK",
   "version": "${version}",
   "packageVersion": "1.27.0_3631150051",
-  "description": "${mod_name}, version ${version}!",
+  "description": "Lets you tweak individual particle settings! And has rainbow particles!",
   "dependencies": [],
   "modFiles": [],
   "libraryFiles": [],
