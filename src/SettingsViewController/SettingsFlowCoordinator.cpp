@@ -9,7 +9,7 @@
 DEFINE_TYPE(ParticleTuner, SettingsFlowCoordinator);
 
 namespace ParticleTuner {
-    
+
     void SettingsFlowCoordinator::DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
     {
         if (!firstActivation)
@@ -18,7 +18,7 @@ namespace ParticleTuner {
 
         showBackButton = true;
         ProvideInitialViewControllers(settingsViewController, nullptr, nullptr, nullptr, nullptr);
-        SetTitle("Particle Tuner", HMUI::ViewController::AnimationType::In);
+        SetTitle("ParticleTuner", HMUI::ViewController::AnimationType::In);
     }
 
     void SettingsFlowCoordinator::BackButtonWasPressed(HMUI::ViewController* topViewController)

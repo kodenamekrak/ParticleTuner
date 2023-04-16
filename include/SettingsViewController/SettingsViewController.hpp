@@ -31,7 +31,7 @@ DECLARE_CLASS_CODEGEN(ParticleTuner, SettingsViewController, HMUI::ViewControlle
     DECLARE_BSML_PROPERTY(bool, ReducedClashEffects);
     DECLARE_BSML_PROPERTY(bool, ReducedDustParticles);
     DECLARE_BSML_PROPERTY(bool, RainbowParticles);
-    
+
     DECLARE_BSML_PROPERTY(float, SparklesMultiplier);
     DECLARE_BSML_PROPERTY(float, SparklesLifetimeMultiplier);
     DECLARE_BSML_PROPERTY(float, ParticleOpacity);

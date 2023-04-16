@@ -2,7 +2,6 @@
 #include "SettingsViewController/SettingsViewController.hpp"
 #include "ModConfig.hpp"
 #include "assets.hpp"
-#include "Dust.hpp"
 
 #include "bsml/shared/BSML.hpp"
 
@@ -124,7 +123,7 @@ namespace ParticleTuner {
 
     bool SettingsViewController::get_ReducedDustParticles() { return getModConfig().ReducedDustParticles.GetValue(); }
     void SettingsViewController::set_ReducedDustParticles(bool value) { getModConfig().ReducedDustParticles.SetValue(value); Dust::SetDustActive(!value); }
-    
+
     DEFINE_BSML_PROPERTY(float, SparklesMultiplier);
     DEFINE_BSML_PROPERTY(float, SparklesLifetimeMultiplier);
     DEFINE_BSML_PROPERTY(float, ParticleOpacity);

@@ -1,15 +1,18 @@
 #include "main.hpp"
 #include "ModConfig.hpp"
 #include "SettingsViewController/UIManager.hpp"
-#include "Dust.hpp"
 
 #include "GlobalNamespace/NoteCutParticlesEffect.hpp"
 #include "GlobalNamespace/BombExplosionEffect.hpp"
 #include "GlobalNamespace/SaberClashEffect.hpp"
+#include "GlobalNamespace/ObstacleSaberSparkleEffect.hpp"
 
 #include "UnityEngine/Color32.hpp"
 #include "UnityEngine/SceneManagement/SceneManager.hpp"
 #include "UnityEngine/SceneManagement/Scene.hpp"
+#include "UnityEngine/ParticleSystem.hpp"
+#include "UnityEngine/ParticleSystem_EmissionModule.hpp"
+#include "UnityEngine/Resources.hpp"
 
 #include "sombrero/shared/FastColor.hpp"
 
@@ -18,6 +21,17 @@
 static ModInfo modInfo;
 
 #define MAX_PARTICLES 2147483647
+
+void ParticleTuner::Dust::SetDustActive(bool value)
+{
+    for(auto particle : UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::ParticleSystem*>())
+    {
+        if(particle->get_name() == "DustPS")
+        {
+            particle->get_emission().set_enabled(value);
+        }
+    }
+}
 
 UnityEngine::Color32 RandomColorGen()
 {
@@ -39,7 +53,7 @@ MAKE_HOOK_MATCH(SceneManager_SetActiveScene, &UnityEngine::SceneManagement::Scen
     if((sceneName == "MainMenu" || sceneName == "GameCore" ) && getModConfig().ReducedDustParticles.GetValue())
     {
         ParticleTuner::Dust::SetDustActive(false);
-    } 
+    }
     return result;
 }
 
@@ -91,11 +105,21 @@ MAKE_HOOK_MATCH(SaberClashEffect_Start, &GlobalNamespace::SaberClashEffect::Star
 {
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparkleParticleSystem->get_gameObject()->SetActive(false);
-        self->glowParticleSystem->get_gameObject()->SetActive(false);
+        self->sparkleParticleSystem->get_emission().set_enabled(false);
+        self->glowParticleSystem->get_emission().set_enabled(false);
     }
-    SaberClashEffect_Start(self); 
+    SaberClashEffect_Start(self);
 }
+
+// MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Start, &GlobalNamespace::ObstacleSaberSparkleEffect::Start, void, GlobalNamespace::ObstacleSaberSparkleEffect *self)
+// {
+//     if(getModConfig().ReducedClashEffects.GetValue())
+//     {
+//         self->sparkleParticleSystem->get_emission().set_enabled(false);
+//         self->burnParticleSystem->get_emission().set_enabled(false);
+//     }
+//     ObstacleSaberSparkleEffect_Start(self);
+// }
 
 Configuration& getConfig() {
     static Configuration config(modInfo);
@@ -112,7 +136,7 @@ extern "C" void setup(ModInfo& info) {
     info.id = MOD_ID;
     info.version = VERSION;
     modInfo = info;
-	
+
     getConfig().Load();
     getLogger().info("Completed setup!");
 }
@@ -131,5 +155,6 @@ extern "C" void load() {
     INSTALL_HOOK(getLogger(), BombExplosionEffect_SpawnExplosion);
     INSTALL_HOOK(getLogger(), SceneManager_SetActiveScene);
     INSTALL_HOOK(getLogger(), SaberClashEffect_Start);
+    // INSTALL_HOOK(getLogger(), ObstacleSaberSparkleEffect_Start);
     getLogger().info("Installed all hooks!");
 }
