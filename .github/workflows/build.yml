@@ -42,8 +42,8 @@ jobs:
         
     - name: QPM Collapse
       run: |
-        chmod +x ./QPM/qpm-rust
-        ./QPM/qpm-rust collapse
+        chmod +x ./QPM/qpm
+        ./QPM/qpm collapse
     
     - name: QPM Dependencies Cache
       id: cache-qpm-deps
@@ -51,7 +51,7 @@ jobs:
       env:
         cache-name: cache-qpm-deps
       with:
-        path: /home/runner/.local/share/QPM-Rust/cache
+        path: /home/runner/.local/share/QPM/cache
         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('qpm.json') }}
         restore-keys: |
           ${{ runner.os }}-build-${{ env.cache-name }}-
