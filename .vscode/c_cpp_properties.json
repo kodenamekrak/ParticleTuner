@@ -1,8 +1,11 @@
 {
+    "env": {
+        "ndkPath": "C:/android-ndk-r25c"
+    },
     "configurations": [
         {
             "defines": [
-                "MOD_ID=\"particletuner\"",
+                "MOD_ID=\"ParticleTuner\"",
                 "VERSION=\"0.1.1\"",
                 "__GNUC__",
                 "__aarch64__"
@@ -14,15 +17,18 @@
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/shared",
                 "${workspaceFolder}",
-                "C:/android-ndk-r25c/**",
-                "${default}"
+                "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/aarch64-linux-android",
+                "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include",
+                "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/sysroot/usr/include/*",
+                "${ndkPath}/sources/cxx-stl/llvm-libc++abi/include",
+                "${ndkPath}/sources/cxx-stl/llvm-libc++/include",
+                "${ndkPath}/"
             ],
+            "compilerPath": "${ndkPath}/toolchains/llvm/prebuilt/windows-x86_64/bin/clang++.exe",
             "name": "Quest",
             "cStandard": "c11",
             "cppStandard": "c++20",
-            "intelliSenseMode": "clang-x64",
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json",
-            "configurationProvider": "ms-vscode.cpptools"
+            "intelliSenseMode": "${default}"
         }
     ],
     "version": 4

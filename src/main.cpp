@@ -1,6 +1,6 @@
 #include "main.hpp"
 #include "ModConfig.hpp"
-#include "SettingsViewController/UIManager.hpp"
+#include "SettingsViewController/SettingsFlowCoordinator.hpp"
 
 #include "GlobalNamespace/NoteCutParticlesEffect.hpp"
 #include "GlobalNamespace/BombExplosionEffect.hpp"
@@ -15,6 +15,8 @@
 #include "UnityEngine/Resources.hpp"
 
 #include "sombrero/shared/FastColor.hpp"
+
+#include "bsml/shared/BSML.hpp"
 
 #include <random>
 
@@ -111,15 +113,15 @@ MAKE_HOOK_MATCH(SaberClashEffect_Start, &GlobalNamespace::SaberClashEffect::Star
     SaberClashEffect_Start(self);
 }
 
-// MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Start, &GlobalNamespace::ObstacleSaberSparkleEffect::Start, void, GlobalNamespace::ObstacleSaberSparkleEffect *self)
-// {
-//     if(getModConfig().ReducedClashEffects.GetValue())
-//     {
-//         self->sparkleParticleSystem->get_emission().set_enabled(false);
-//         self->burnParticleSystem->get_emission().set_enabled(false);
-//     }
-//     ObstacleSaberSparkleEffect_Start(self);
-// }
+MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Awake, &GlobalNamespace::ObstacleSaberSparkleEffect::Awake, void, GlobalNamespace::ObstacleSaberSparkleEffect *self)
+{
+    ObstacleSaberSparkleEffect_Awake(self);
+    if(getModConfig().ReducedClashEffects.GetValue())
+    {
+        self->sparkleParticleSystem->get_emission().set_enabled(false);
+        self->burnParticleSystem->get_emission().set_enabled(false);
+    }
+}
 
 Configuration& getConfig() {
     static Configuration config(modInfo);
@@ -147,7 +149,7 @@ extern "C" void load() {
 
     getModConfig().Init(modInfo);
     BSML::Init();
-    ParticleTuner::manager.Init();
+    BSML::Register::RegisterMenuButton("ParticleTuner", "ParticleTuner", ParticleTuner::SettingsFlowCoordinator::PresentFlow);
 
 
     getLogger().info("Installing hooks...");
@@ -155,6 +157,6 @@ extern "C" void load() {
     INSTALL_HOOK(getLogger(), BombExplosionEffect_SpawnExplosion);
     INSTALL_HOOK(getLogger(), SceneManager_SetActiveScene);
     INSTALL_HOOK(getLogger(), SaberClashEffect_Start);
-    // INSTALL_HOOK(getLogger(), ObstacleSaberSparkleEffect_Start);
+    INSTALL_HOOK(getLogger(), ObstacleSaberSparkleEffect_Awake);
     getLogger().info("Installed all hooks!");
 }
