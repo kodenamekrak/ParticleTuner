@@ -5,6 +5,7 @@
 #include "GlobalNamespace/NoteCutParticlesEffect.hpp"
 #include "GlobalNamespace/BombExplosionEffect.hpp"
 #include "GlobalNamespace/SaberClashEffect.hpp"
+#include "GlobalNamespace/SaberBurnMarkSparkles.hpp"
 #include "GlobalNamespace/ObstacleSaberSparkleEffect.hpp"
 
 #include "UnityEngine/Color32.hpp"
@@ -105,12 +106,24 @@ MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCut
 
 MAKE_HOOK_MATCH(SaberClashEffect_Start, &GlobalNamespace::SaberClashEffect::Start, void, GlobalNamespace::SaberClashEffect *self)
 {
+    SaberClashEffect_Start(self);
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparkleParticleSystem->get_emission().set_enabled(false);
-        self->glowParticleSystem->get_emission().set_enabled(false);
+        self->sparkleParticleSystem->get_main().set_maxParticles(0);./
+        self->glowParticleSystem->get_main().set_maxParticles(0);
     }
-    SaberClashEffect_Start(self);
+}
+
+MAKE_HOOK_MATCH(SaberBurnMarkSparkles_Start, &GlobalNamespace::SaberBurnMarkSparkles::Start, void, GlobalNamespace::SaberBurnMarkSparkles *self)
+{
+    SaberBurnMarkSparkles_Start(self);
+    if(getModConfig().ReducedClashEffects.GetValue())
+    {
+        self->sparklesPS->get_main().set_maxParticles(0);
+
+        for(auto ps : self->burnMarksPS)
+            ps->get_main().set_maxParticles(0);
+    }
 }
 
 MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Awake, &GlobalNamespace::ObstacleSaberSparkleEffect::Awake, void, GlobalNamespace::ObstacleSaberSparkleEffect *self)
@@ -118,8 +131,8 @@ MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Awake, &GlobalNamespace::ObstacleSabe
     ObstacleSaberSparkleEffect_Awake(self);
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparkleParticleSystem->get_emission().set_enabled(false);
-        self->burnParticleSystem->get_emission().set_enabled(false);
+        self->sparkleParticleSystem->get_main().set_maxParticles(0);
+        self->burnParticleSystem->get_main().set_maxParticles(0);
     }
 }
 
@@ -157,6 +170,7 @@ extern "C" void load() {
     INSTALL_HOOK(getLogger(), BombExplosionEffect_SpawnExplosion);
     INSTALL_HOOK(getLogger(), SceneManager_SetActiveScene);
     INSTALL_HOOK(getLogger(), SaberClashEffect_Start);
+    INSTALL_HOOK(getLogger(), SaberBurnMarkSparkles_Start);
     INSTALL_HOOK(getLogger(), ObstacleSaberSparkleEffect_Awake);
     getLogger().info("Installed all hooks!");
 }

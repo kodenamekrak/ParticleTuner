@@ -1,100 +1,153 @@
-# Credit to darknight1050 https://github.com/darknight1050/CrashReporter/blob/master/.github/workflows/build-ndk.yml
-
 name: NDK build
-
-env:
-    module_id: particletuner
-    qmodName: ParticleTuner
 
 on:
   workflow_dispatch:
   push:
-    branches-ignore:
-      - 'version-v*'
+    branches:
+      - master
+    paths-ignore:
+      - "**.yml"
+      - "!.github/workflows/build-ndk.yml"
+      - "**.json"
+      - "!qpm.json"
+      - "!mod.template.json"
+      - "**.txt"
+      - "!CMakeLists.txt"
+      - "**.ps1"
+      - "!scripts/*"
+      - "**.md"
+      - ".gitignore"
   pull_request:
+    branches:
+      - master
+
+env:
+  module_id: songdetails
+  qmodName: SongDetails
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+    env:
+      WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      VCPKG_ROOT: ${{ github.workspace }}/vcpkg
     steps:
-    - uses: actions/checkout@v2
-      name: Checkout
-      with:
-        submodules: true
-        lfs: true
-    
-    - uses: seanmiddleditch/gha-setup-ninja@v3
+      - uses: FranzDiebold/github-env-vars-action@v2
 
-    - name: Create ndkpath.txt
-      run: |
-        echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
-        cat ${GITHUB_WORKSPACE}/ndkpath.txt
-    - name: Get QPM
-      if: steps.cache-qpm.outputs.cache-hit != 'true'
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: cargo-build.yml
-        name: linux-qpm
-        path: QPM
-        repo: QuestPackageManager/QPM.CLI
-        
-    - name: QPM Collapse
-      run: |
-        chmod +x ./QPM/qpm
-        ./QPM/qpm collapse
-    
-    - name: QPM Dependencies Cache
-      id: cache-qpm-deps
-      uses: actions/cache@v2
-      env:
-        cache-name: cache-qpm-deps
-      with:
-        path: /home/runner/.local/share/QPM/cache
-        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('qpm.json') }}
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
-    - name: QPM Restore
-      run: |
-        ./QPM/qpm restore
-    - name: List Post Restore
-      run: |
-        echo includes:
-        ls -la ${GITHUB_WORKSPACE}/extern/includes
-        echo libs:
-        ls -la ${GITHUB_WORKSPACE}/extern/libs
-        echo cache:
-        ls -la $HOME/.local/share/QPM-Rs/cache
-        
-    - name: Build
-      run: |
-        cd ${GITHUB_WORKSPACE}
-        ./QPM/qpm qmod build
-        pwsh -Command ./build.ps1
-    - name: Create Qmod
-      run: |
-        pwsh -Command ./createqmod.ps1
-    - name: Get Library Name
-      id: libname
-      run: |
-        cd ./build/
-        pattern="lib${module_id}*.so"
-        files=( $pattern )
-        echo ::set-output name=NAME::"${files[0]}"
-    
-    - name: Upload so artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{ steps.libname.outputs.NAME }}
-        path: ./build/${{ steps.libname.outputs.NAME }}
-        if-no-files-found: error
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          lfs: true
 
-    - name: Upload qmod artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: ${{env.qmodName}}.qmod
-        path: ./${{ env.qmodName }}.qmod
-        if-no-files-found: error
+      - name: Setup Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      # - name: Setup Protoc
+      #  uses: arduino/setup-protoc@v1
+      #  with:
+      #    repo-token: ${{ secrets.GITHUB_TOKEN }}
+      #    version: '3.x'
+      # - name: Run protoc
+      #   run: pwsh -Command ./run_protoc.ps1
+
+      - name: VCPKG Cache
+        id: cache-vcpkg
+        uses: actions/cache@v2
+        env:
+          cache-name: ${{ steps.vcpkg.outputs.vcpkg_cache }}
+        with:
+          path: ${{ github.workspace }}/vcpkg
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('vcpkg.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: Get Protobuf from vcpkg
+        uses: johnwason/vcpkg-action@v4
+        id: vcpkg
+        with:
+          manifest-dir: ${{ github.workspace }}
+          triplet: arm64-android
+          token: ${{ github.token }}
+
+      - name: Create ndkpath.txt
+        run: |
+          echo "$ANDROID_NDK_LATEST_HOME" > ${GITHUB_WORKSPACE}/ndkpath.txt
+          cat ${GITHUB_WORKSPACE}/ndkpath.txt
+      - name: Get QPM
+        if: steps.cache-qpm.outputs.cache-hit != 'true'
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: cargo-build.yml
+          name: linux-qpm
+          path: QPM
+          repo: QuestPackageManager/QPM.CLI
+
+      - name: Put QPM on path
+        run: |
+          chmod +x ./QPM/qpm
+          echo "${GITHUB_WORKSPACE}/QPM" >> $GITHUB_PATH
+      - name: QPM Collapse
+        run: |
+          qpm collapse
+      - name: QPM Dependencies Cache
+        id: cache-qpm-deps
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-qpm-deps
+        with:
+          path: /home/runner/.local/share/QPM-Rs/cache
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('qpm.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: QPM Restore
+        run: |
+          qpm restore
+      - name: List Post Restore
+        run: |
+          echo includes:
+          ls -la ${GITHUB_WORKSPACE}/extern/includes
+          echo libs:
+          ls -la ${GITHUB_WORKSPACE}/extern/libs
+      - name: Build & Create Qmod
+        run: |
+          cd ${GITHUB_WORKSPACE}
+          qpm s qmod
+      - name: Get Library Name
+        id: libname
+        run: |
+          cd ./build/
+          pattern="lib${module_id}*.so"
+          files=( $pattern )
+          echo "NAME=${files[0]}" >> $GITHUB_OUTPUT
+      - name: Upload release artifact
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          content: "${{ env.CI_SHA_SHORT }} - `${{ github.event.head_commit.message }}`"
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./build/${{ steps.libname.outputs.NAME }}
+
+      - name: Upload debug artifact
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./build/debug/${{ steps.libname.outputs.NAME }}
+
+      - name: Upload qmod
+        if: "${{ env.WEBHOOK != '' }}"
+        uses: tsickert/discord-webhook@v3.2.0
+        with:
+          webhook-url: ${{ env.WEBHOOK }}
+          username: "${{ github.repository }}"
+          avatar-url: "http://github.com/${{ env.CI_ACTOR }}.png"
+          filename: ./${{ env.qmodName }}.qmod

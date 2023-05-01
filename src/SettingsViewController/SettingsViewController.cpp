@@ -51,69 +51,25 @@ namespace ParticleTuner {
     void SettingsViewController::ApplyNone()
     {
         getLogger().info("Applying config 'None'");
-        ApplyConfig(
-            true,
-            true,
-            true,
-            true,
-            false,
-            0,
-            0,
-            0,
-            0,
-            0
-        );
+        ApplyConfig(true, true, true, true, false, 0, 0, 0, 0, 0);
     }
 
     void SettingsViewController::ApplyNormal()
     {
         getLogger().info("Applying config 'Normal'");
-        ApplyConfig(
-            false,
-            false,
-            false,
-            false,
-            false,
-            1,
-            1,
-            1,
-            1,
-            1
-        );
+        ApplyConfig(false, false, false, false, false, 1, 1, 1, 1, 1);
     }
 
     void SettingsViewController::ApplyFantasy()
     {
         getLogger().info("Applying config 'Fantasy'");
-        ApplyConfig(
-            false,
-            false,
-            false,
-            true,
-            true,
-            12,
-            2,
-            0.1f,
-            1,
-            1
-        );
+        ApplyConfig(false, false, false, true, true, 12, 2, 0.1f, 1, 1);
     }
 
     void SettingsViewController::ApplyInsane()
     {
         getLogger().info("Applying config 'Insane'");
-        ApplyConfig(
-            false,
-            false,
-            false,
-            false,
-            true,
-            100,
-            10,
-            10,
-            10,
-            1
-        );
+        ApplyConfig(false, false, false, false, true, 100, 10, 10, 10, 1);
     }
 
     DEFINE_BSML_PROPERTY(bool, ReducedNoteParticles);
