@@ -5,6 +5,7 @@
   "author": "KodenameKRAK",
   "version": "${version}",
   "packageVersion": "1.28.0_4124311467",
+  "coverImage": "cover.gif",
   "description": "Lets you tweak individual particle settings! And has rainbow particles!",
   "dependencies": [],
   "modFiles": [],
