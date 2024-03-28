@@ -1,8 +1,8 @@
 name: NDK build
 
 env:
-    module_id: qonsistentsabercolors
-    qmodName: QonsistentSaberColors
+    module_id: particletuner
+    qmodName: ParticleTuner
 
 on:
   workflow_dispatch:
