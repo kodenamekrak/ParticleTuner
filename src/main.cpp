@@ -1,6 +1,6 @@
 #include "main.hpp"
 #include "ModConfig.hpp"
-#include "SettingsViewController/SettingsFlowCoordinator.hpp"
+#include "SettingsViewController.hpp"
 
 #include "GlobalNamespace/NoteCutParticlesEffect.hpp"
 #include "GlobalNamespace/BombExplosionEffect.hpp"
@@ -12,7 +12,6 @@
 #include "UnityEngine/SceneManagement/SceneManager.hpp"
 #include "UnityEngine/SceneManagement/Scene.hpp"
 #include "UnityEngine/ParticleSystem.hpp"
-#include "UnityEngine/ParticleSystem_EmissionModule.hpp"
 #include "UnityEngine/Resources.hpp"
 
 #include "sombrero/shared/FastColor.hpp"
@@ -21,11 +20,11 @@
 
 #include <random>
 
-static ModInfo modInfo;
+static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 
 #define MAX_PARTICLES 2147483647
 
-void ParticleTuner::Dust::SetDustActive(bool value)
+void SetDustActive(bool value)
 {
     for(auto particle : UnityEngine::Resources::FindObjectsOfTypeAll<UnityEngine::ParticleSystem*>())
     {
@@ -45,17 +44,17 @@ UnityEngine::Color32 RandomColorGen()
     float value = 1.0f;
 
     Sombrero::FastColor color = Sombrero::FastColor::HSVToRGB(hue, saturation, value);
-    return UnityEngine::Color32(color.r * 255, color.g * 255, color.b * 255);
+    return UnityEngine::Color32(0, color.r * 255, color.g * 255, color.b * 255, 0);
 }
 
 MAKE_HOOK_MATCH(SceneManager_SetActiveScene, &UnityEngine::SceneManagement::SceneManager::SetActiveScene, bool, UnityEngine::SceneManagement::Scene newActiveScene)
 {
     bool result = SceneManager_SetActiveScene(newActiveScene);
 
-    std::string sceneName = newActiveScene.get_name();
+    StringW sceneName = newActiveScene.name;
     if((sceneName == "MainMenu" || sceneName == "GameCore" ) && getModConfig().ReducedDustParticles.GetValue())
     {
-        ParticleTuner::Dust::SetDustActive(false);
+        SetDustActive(false);
     }
     return result;
 }
@@ -64,8 +63,8 @@ MAKE_HOOK_MATCH(BombExplosionEffect_SpawnExplosion, &GlobalNamespace::BombExplos
 {
     if(getModConfig().ReducedBombCutEffects.GetValue())
     {
-        self->debrisCount = 0;
-        self->explosionParticlesCount = 0;
+        self->_debrisCount = 0;
+        self->_explosionParticlesCount = 0;
     }
 
     BombExplosionEffect_SpawnExplosion(self, pos);
@@ -84,12 +83,12 @@ MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCut
         explosionParticlesCount = static_cast<int>(static_cast<float>(getModConfig().ExplosionsMultiplier.GetValue()) * explosionParticlesCount);
         lifetimeMultiplier = getModConfig().SparklesLifetimeMultiplier.GetValue() * 0.5f;
 
-        auto sparkleMain = self->sparklesPS->get_main();
+        auto sparkleMain = self->_sparklesPS->get_main();
         sparkleMain.set_maxParticles(MAX_PARTICLES);
 
-        auto explosionMain = self->explosionPS->get_main();
+        auto explosionMain = self->_explosionPS->get_main();
         explosionMain.set_maxParticles(MAX_PARTICLES);
-        explosionMain.set_startLifetime(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f);
+        explosionMain.set_startLifetime(UnityEngine::ParticleSystem::MinMaxCurve::op_Implicit___UnityEngine____ParticleSystem__MinMaxCurve(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f));
 
         if(getModConfig().RainbowParticles.GetValue())
         {
@@ -109,8 +108,8 @@ MAKE_HOOK_MATCH(SaberClashEffect_Start, &GlobalNamespace::SaberClashEffect::Star
     SaberClashEffect_Start(self);
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparkleParticleSystem->get_main().set_maxParticles(0);./
-        self->glowParticleSystem->get_main().set_maxParticles(0);
+        self->_sparkleParticleSystem->get_main().set_maxParticles(0);
+        self->_glowParticleSystem->get_main().set_maxParticles(0);
     }
 }
 
@@ -119,9 +118,9 @@ MAKE_HOOK_MATCH(SaberBurnMarkSparkles_Start, &GlobalNamespace::SaberBurnMarkSpar
     SaberBurnMarkSparkles_Start(self);
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparklesPS->get_main().set_maxParticles(0);
+        self->_sparklesPS->get_main().set_maxParticles(0);
 
-        for(auto ps : self->burnMarksPS)
+        for(auto ps : self->_burnMarksPS)
             ps->get_main().set_maxParticles(0);
     }
 }
@@ -131,29 +130,15 @@ MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Awake, &GlobalNamespace::ObstacleSabe
     ObstacleSaberSparkleEffect_Awake(self);
     if(getModConfig().ReducedClashEffects.GetValue())
     {
-        self->sparkleParticleSystem->get_main().set_maxParticles(0);
-        self->burnParticleSystem->get_main().set_maxParticles(0);
+        self->_sparkleParticleSystem->get_main().set_maxParticles(0);
+        self->_burnParticleSystem->get_main().set_maxParticles(0);
     }
 }
 
-Configuration& getConfig() {
-    static Configuration config(modInfo);
-    return config;
-}
+void setup(CModInfo* info) {
+    *info = modInfo.to_c();
 
-Logger& getLogger() {
-    static Logger* logger = new Logger(modInfo);
-    return *logger;
-}
-
-// Called at the early stages of game loading
-extern "C" void setup(ModInfo& info) {
-    info.id = MOD_ID;
-    info.version = VERSION;
-    modInfo = info;
-
-    getConfig().Load();
-    getLogger().info("Completed setup!");
+    INFO("Completed setup!");
 }
 
 // Called later on in the game loading - a good time to install function hooks
@@ -162,15 +147,15 @@ extern "C" void load() {
 
     getModConfig().Init(modInfo);
     BSML::Init();
-    BSML::Register::RegisterMenuButton("ParticleTuner", "ParticleTuner", ParticleTuner::SettingsFlowCoordinator::PresentFlow);
+    BSML::Register::RegisterMainMenu<ParticleTuner::SettingsViewController*>("ParticleTuner", "ParticleTuner", "ParticleTuner mod settings");
 
 
-    getLogger().info("Installing hooks...");
-    INSTALL_HOOK(getLogger(), NoteCutParticlesEffect_SpawnParticles);
-    INSTALL_HOOK(getLogger(), BombExplosionEffect_SpawnExplosion);
-    INSTALL_HOOK(getLogger(), SceneManager_SetActiveScene);
-    INSTALL_HOOK(getLogger(), SaberClashEffect_Start);
-    INSTALL_HOOK(getLogger(), SaberBurnMarkSparkles_Start);
-    INSTALL_HOOK(getLogger(), ObstacleSaberSparkleEffect_Awake);
-    getLogger().info("Installed all hooks!");
+    INFO("Installing hooks...");
+    INSTALL_HOOK(Logger, NoteCutParticlesEffect_SpawnParticles);
+    INSTALL_HOOK(Logger, BombExplosionEffect_SpawnExplosion);
+    INSTALL_HOOK(Logger, SceneManager_SetActiveScene);
+    INSTALL_HOOK(Logger, SaberClashEffect_Start);
+    INSTALL_HOOK(Logger, SaberBurnMarkSparkles_Start);
+    INSTALL_HOOK(Logger, ObstacleSaberSparkleEffect_Awake);
+    INFO("Installed all hooks!");
 }
