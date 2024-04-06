@@ -4,11 +4,11 @@
   "id": "${mod_id}",
   "author": "KodenameKRAK",
   "version": "${version}",
-  "packageVersion": "1.28.0_4124311467",
+  "packageVersion": "1.35.0_8016709773",
   "coverImage": "cover.gif",
   "description": "Lets you tweak individual particle settings! And has rainbow particles!",
   "dependencies": [],
-  "modFiles": [],
+  "lateModFiles": ["${binary}"],
   "libraryFiles": [],
   "fileCopies": [],
   "copyExtensions": []

@@ -142,7 +142,7 @@ void setup(CModInfo* info) {
 }
 
 // Called later on in the game loading - a good time to install function hooks
-extern "C" void load() {
+extern "C" void late_load() {
     il2cpp_functions::Init();
 
     getModConfig().Init(modInfo);
