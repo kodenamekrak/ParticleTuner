@@ -58,6 +58,7 @@ jobs:
         uses: Fernthedev/qpm-action@main
         with:
           workflow_token: ${{ secrets.GITHUB_TOKEN }}
+          qpm_version: ref@main
           restore: true
           cache: true
           publish: false
@@ -66,6 +67,7 @@ jobs:
         uses: Fernthedev/qpm-action@main
         with:
           workflow_token: ${{ secrets.GITHUB_TOKEN }}
+          qpm_version: ref@main
           restore: true
           cache: true
           publish: false
