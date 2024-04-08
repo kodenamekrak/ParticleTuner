@@ -55,7 +55,7 @@ jobs:
           echo "VERSION=${GITHUB_REF#refs/tags/v}" >> ${GITHUB_OUTPUT}
       - name: Setup qpm
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        uses: Fernthedev/qpm-action@main
+        uses: Fernthedev/qpm-action@v1
         with:
           workflow_token: ${{ secrets.GITHUB_TOKEN }}
           qpm_version: ref@v1
