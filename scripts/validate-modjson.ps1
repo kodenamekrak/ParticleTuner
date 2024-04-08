@@ -2,6 +2,7 @@ $mod = "./mod.json"
 
 if (-not (Test-Path -Path $mod)) {
     if (Test-Path manifest) {
+        qpm qmod manifest
         if ($LASTEXITCODE -ne 0) {
             exit $LASTEXITCODE
         }
