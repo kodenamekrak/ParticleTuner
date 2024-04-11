@@ -146,6 +146,9 @@ extern "C" void late_load() {
     il2cpp_functions::Init();
 
     getModConfig().Init(modInfo);
+
+    custom_types::Register::AutoRegister();
+
     BSML::Init();
     BSML::Register::RegisterMainMenu<ParticleTuner::SettingsViewController*>("ParticleTuner", "ParticleTuner", "ParticleTuner mod settings");
 
