@@ -5,7 +5,7 @@
   "info": {
     "name": "ParticleTuner",
     "id": "particletuner",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "url": null,
     "additionalData": {
       "overrideSoName": "libparticletuner.so",
@@ -27,10 +27,6 @@
         "adb logcat -c",
         "pwsh ./scripts/start-logging.ps1"
       ],
-      "qmod": [
-        "pwsh ./scripts/build.ps1",
-        "pwsh ./scripts/createqmod.ps1"
-      ],
       "restart": [
         "pwsh ./scripts/restart-game.ps1"
       ],
@@ -40,7 +36,10 @@
       "tomb": [
         "pwsh ./scripts/pull-tombstone.ps1"
       ]
-    }
+    },
+    "qmodIncludeDirs": ["./build", "./extern/libs"],
+    "qmodIncludeFiles": ["cover.gif"],
+    "qmodOutput": "ParticleTuner"
   },
   "dependencies": [
     {
@@ -64,19 +63,14 @@
     },
     {
       "id": "bs-cordl",
-      "versionRange": "^3500.0.0",
-      "additionalData": {}
-    },
-    {
-      "id": "bsml",
-      "versionRange": "^0.4.20",
+      "versionRange": "^3700.0.0",
       "additionalData": {}
     },
     {
       "id": "scotland2",
       "versionRange": "^0.1.4",
       "additionalData": {
-        "includeQmod:": false
+        "includeQmod": false
       }
     },
     {
@@ -87,6 +81,11 @@
     {
       "id": "paper",
       "versionRange": "^3.6.3",
+      "additionalData": {}
+    },
+    {
+      "id": "bsml",
+      "versionRange": "^0.4.42",
       "additionalData": {}
     }
   ]
