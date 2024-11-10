@@ -37,14 +37,19 @@
         "pwsh ./scripts/pull-tombstone.ps1"
       ]
     },
-    "qmodIncludeDirs": ["./build", "./extern/libs"],
-    "qmodIncludeFiles": ["cover.gif"],
+    "qmodIncludeDirs": [
+      "./build",
+      "./extern/libs"
+    ],
+    "qmodIncludeFiles": [
+      "cover.gif"
+    ],
     "qmodOutput": "ParticleTuner"
   },
   "dependencies": [
     {
       "id": "beatsaber-hook",
-      "versionRange": "^5.1.0",
+      "versionRange": "^5.1.9",
       "additionalData": {
         "extraFiles": [
           "src/inline-hook"
