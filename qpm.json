@@ -1,11 +1,12 @@
 {
-  "version": "0.1.0",
+  "$schema": "https://raw.githubusercontent.com/QuestPackageManager/QPM.Package/refs/heads/main/qpm.schema.json",
+  "version": "0.4.0",
   "sharedDir": "shared",
   "dependenciesDir": "extern",
   "info": {
     "name": "ParticleTuner",
     "id": "particletuner",
-    "version": "0.3.1",
+    "version": "0.3.3",
     "url": null,
     "additionalData": {
       "overrideSoName": "libparticletuner.so",
@@ -20,12 +21,36 @@
       "clean": [
         "pwsh ./scripts/build.ps1 -clean"
       ],
+      "clean-qmod": [
+        "qpm s clean",
+        "qpm s qmod"
+      ],
       "copy": [
-        "pwsh ./scripts/copy.ps1"
+        "pwsh ./scripts/copy.ps1 $0:?"
+      ],
+      "deepclean": [
+        "pwsh ./scripts/build.ps1 -clean -skipBuild",
+        "qpm clear"
       ],
       "logcat": [
-        "adb logcat -c",
         "pwsh ./scripts/start-logging.ps1"
+      ],
+      "make-hooking": [
+        "pwsh ./common-stuff/scripts/make-hooking.ps1"
+      ],
+      "qmod": [
+        "qpm s build",
+        "qpm s update-version",
+        "qpm qmod zip --skip_build",
+        "qpm s update-version -- -restore"
+      ],
+      "rebuild": [
+        "qpm s deepclean",
+        "qpm s build"
+      ],
+      "rebuild-qmod": [
+        "qpm s deepclean",
+        "qpm s qmod"
       ],
       "restart": [
         "pwsh ./scripts/restart-game.ps1"
@@ -35,62 +60,70 @@
       ],
       "tomb": [
         "pwsh ./scripts/pull-tombstone.ps1"
+      ],
+      "update-version": [
+        "pwsh ./scripts/update-version.ps1 $0:?"
       ]
     },
+    "ndk": "^27.2.12479018",
     "qmodIncludeDirs": [
       "./build",
       "./extern/libs"
     ],
-    "qmodIncludeFiles": [
-      "cover.gif"
-    ],
-    "qmodOutput": "ParticleTuner"
+    "qmodIncludeFiles": [],
+    "qmodOutput": "./ParticleTuner.qmod"
   },
   "dependencies": [
     {
-      "id": "beatsaber-hook",
-      "versionRange": "^5.1.9",
-      "additionalData": {
-        "extraFiles": [
-          "src/inline-hook"
-        ]
-      }
-    },
-    {
-      "id": "sombrero",
-      "versionRange": "^0.1.37",
+      "id": "autohooks",
+      "versionRange": "^0.1.0",
       "additionalData": {}
     },
     {
-      "id": "config-utils",
-      "versionRange": "^1.4.2",
+      "id": "beatsaber-hook",
+      "versionRange": "^6.4.1",
       "additionalData": {}
     },
     {
       "id": "bs-cordl",
-      "versionRange": "^3700.0.0",
+      "versionRange": "4004.*",
+      "additionalData": {}
+    },
+    {
+      "id": "mmkay",
+      "versionRange": "^0.1.0",
+      "additionalData": {}
+    },
+    {
+      "id": "paper2_scotland2",
+      "versionRange": "^4.6.1",
       "additionalData": {}
     },
     {
       "id": "scotland2",
-      "versionRange": "^0.1.4",
+      "versionRange": "^0.1.6",
       "additionalData": {
         "includeQmod": false
       }
     },
     {
-      "id": "custom-types",
-      "versionRange": "^0.17.6",
-      "additionalData": {}
-    },
-    {
-      "id": "paper",
-      "versionRange": "^3.6.3",
-      "additionalData": {}
-    },
-    {
       "id": "bsml",
-      "versionRange": "^0.4.42",
+      "versionRange": "^0.4.51",
+      "additionalData": {}
+    },
+    {
+      "id": "sombrero",
+      "versionRange": "^0.1.40",
+      "additionalData": {}
+    },
+    {
+      "id": "custom-types",
+      "versionRange": "^0.18.2",
+      "additionalData": {}
+    },
+    {
+      "id": "config-utils",
+      "versionRange": "^2.0.2",
       "additionalData": {}
     }
   ]
