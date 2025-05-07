@@ -29,24 +29,6 @@ MOD_EXPORT_FUNC void setup(CModInfo& info) {
     Logger.info("Completed setup!");
 }
 
-/// @brief Called early on in the game loading
-/// @return
-/* TODO: Remove this if stuff doesn't go south
-MOD_EXPORT_FUNC void load() {
-il2cpp_functions::Init();
-
-// Get the number of early hooks that will be installed.
-auto earlyHookCount = EARLY_HOOK_COUNT;
-
-// install early hooks
-if (earlyHookCount > 0) {
-    Logger.info("Installing {} early hook{}", earlyHookCount, earlyHookCount == 0 || earlyHookCount > 1 ? "s" : "");
-    INSTALL_EARLY_HOOKS();
-    Logger.info("Finished installing early hook{}", earlyHookCount == 0 || earlyHookCount > 1 ? "s" : "");
-}
-}
-*/
-
 /// @brief Called later on in the game loading - a good time to install function hooks
 /// @return
 MOD_EXPORT_FUNC void late_load() {
