@@ -5,7 +5,7 @@
 #include "bsml/shared/BSML/Components/Settings/IncrementSetting.hpp"
 #include "HMUI/ViewController.hpp"
 
-DECLARE_CLASS_CODEGEN(ParticleTuner, SettingsViewController, HMUI::ViewController,
+DECLARE_CLASS_CODEGEN(ParticleTuner, SettingsViewController, HMUI::ViewController) {
     DECLARE_OVERRIDE_METHOD(void, DidActivate, il2cpp_utils::FindMethodUnsafe("HMUI", "ViewController", "DidActivate", 3), bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling);
 
     DECLARE_INSTANCE_FIELD(BSML::ToggleSetting*, ReduceCoreToggle);
@@ -37,4 +37,4 @@ DECLARE_CLASS_CODEGEN(ParticleTuner, SettingsViewController, HMUI::ViewControlle
     DECLARE_BSML_PROPERTY(float, ParticleOpacity);
     DECLARE_BSML_PROPERTY(float, ExplosionsMultiplier);
     DECLARE_BSML_PROPERTY(float, ExplosionsLifetimeMultiplier);
-)
+};

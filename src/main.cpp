@@ -22,7 +22,7 @@
 
 static modloader::ModInfo modInfo{MOD_ID, VERSION, 0};
 
-#define MAX_PARTICLES 2147483647
+constexpr int MAX_PARTICLES = std::numeric_limits<int>::max();
 
 void SetDustActive(bool value)
 {
@@ -88,7 +88,7 @@ MAKE_HOOK_MATCH(NoteCutParticlesEffect_SpawnParticles, &GlobalNamespace::NoteCut
 
         auto explosionMain = self->_explosionPS->get_main();
         explosionMain.set_maxParticles(MAX_PARTICLES);
-        explosionMain.set_startLifetime(UnityEngine::ParticleSystem::MinMaxCurve::op_Implicit___UnityEngine____ParticleSystem__MinMaxCurve(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f));
+        explosionMain.set_startLifetime(UnityEngine::ParticleSystem::MinMaxCurve::op_Implicit___UnityEngine__ParticleSystem_MinMaxCurve(getModConfig().ExplosionsLifetimeMultiplier.GetValue() * 0.6f));
 
         if(getModConfig().RainbowParticles.GetValue())
         {
@@ -121,7 +121,9 @@ MAKE_HOOK_MATCH(SaberBurnMarkSparkles_Start, &GlobalNamespace::SaberBurnMarkSpar
         self->_sparklesPS->get_main().set_maxParticles(0);
 
         for(auto ps : self->_burnMarksPS)
+        {
             ps->get_main().set_maxParticles(0);
+        }
     }
 }
 
