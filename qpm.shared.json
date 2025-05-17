@@ -51,44 +51,44 @@
     "dependencies": [
       {
         "id": "beatsaber-hook",
-        "versionRange": "^6.0.0",
-        "additionalData": {}
-      },
-      {
-        "id": "sombrero",
-        "versionRange": "^0.1.37",
-        "additionalData": {}
-      },
-      {
-        "id": "config-utils",
-        "versionRange": "^2.0.0",
+        "versionRange": "^6.4.1",
         "additionalData": {}
       },
       {
         "id": "bs-cordl",
-        "versionRange": "^4004.0.0",
+        "versionRange": "4005.*",
+        "additionalData": {}
+      },
+      {
+        "id": "bsml",
+        "versionRange": "^0.4.52",
+        "additionalData": {}
+      },
+      {
+        "id": "config-utils",
+        "versionRange": "^2.0.3",
+        "additionalData": {}
+      },
+      {
+        "id": "custom-types",
+        "versionRange": "^0.18.2",
+        "additionalData": {}
+      },
+      {
+        "id": "paper2_scotland2",
+        "versionRange": "^4.6.4",
         "additionalData": {}
       },
       {
         "id": "scotland2",
-        "versionRange": "^0.1.4",
+        "versionRange": "^0.1.6",
         "additionalData": {
           "includeQmod": false
         }
       },
       {
-        "id": "custom-types",
-        "versionRange": "^0.18.0",
-        "additionalData": {}
-      },
-      {
-        "id": "paper2_scotland2",
-        "versionRange": "^4.0.0",
-        "additionalData": {}
-      },
-      {
-        "id": "bsml",
-        "versionRange": "^0.4.42",
+        "id": "sombrero",
+        "versionRange": "^0.1.43",
         "additionalData": {}
       }
     ]
@@ -116,23 +116,22 @@
     },
     {
       "dependency": {
-        "id": "rapidjson-macros",
-        "versionRange": "=2.1.0",
+        "id": "sombrero",
+        "versionRange": "=0.1.43",
         "additionalData": {
           "headersOnly": true,
-          "branchName": "version/v2_1_0",
-          "cmake": false
+          "branchName": "version/v0_1_43"
         }
       },
-      "version": "2.1.0"
+      "version": "0.1.43"
     },
     {
       "dependency": {
         "id": "bs-cordl",
-        "versionRange": "=4004.0.0",
+        "versionRange": "=4005.0.0",
         "additionalData": {
           "headersOnly": true,
-          "branchName": "version/v4004_0_0",
+          "branchName": "version/v4005_0_0",
           "compileOptions": {
             "includePaths": [
               "include"
@@ -148,17 +147,17 @@
           }
         }
       },
-      "version": "4004.0.0"
+      "version": "4005.0.0"
     },
     {
       "dependency": {
         "id": "paper2_scotland2",
-        "versionRange": "=4.6.3",
+        "versionRange": "=4.6.4",
         "additionalData": {
-          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.3/libpaper2_scotland2.so",
+          "soLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.4/libpaper2_scotland2.so",
           "overrideSoName": "libpaper2_scotland2.so",
-          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.3/paper2_scotland2.qmod",
-          "branchName": "version/v4_6_3",
+          "modLink": "https://github.com/Fernthedev/paperlog/releases/download/v4.6.4/paper2_scotland2.qmod",
+          "branchName": "version/v4_6_4",
           "compileOptions": {
             "systemIncludes": [
               "shared/utfcpp/source"
@@ -167,18 +166,7 @@
           "cmake": false
         }
       },
-      "version": "4.6.3"
-    },
-    {
-      "dependency": {
-        "id": "sombrero",
-        "versionRange": "=0.1.43",
-        "additionalData": {
-          "headersOnly": true,
-          "branchName": "version/v0_1_43"
-        }
-      },
-      "version": "0.1.43"
+      "version": "4.6.4"
     },
     {
       "dependency": {
@@ -194,6 +182,18 @@
         }
       },
       "version": "10.0.0"
+    },
+    {
+      "dependency": {
+        "id": "rapidjson-macros",
+        "versionRange": "=2.1.0",
+        "additionalData": {
+          "headersOnly": true,
+          "branchName": "version/v2_1_0",
+          "cmake": false
+        }
+      },
+      "version": "2.1.0"
     },
     {
       "dependency": {
@@ -245,19 +245,18 @@
     },
     {
       "dependency": {
-        "id": "libil2cpp",
-        "versionRange": "=0.4.0",
+        "id": "bsml",
+        "versionRange": "=0.4.52",
         "additionalData": {
-          "headersOnly": true,
-          "compileOptions": {
-            "systemIncludes": [
-              "il2cpp/external/baselib/Include",
-              "il2cpp/external/baselib/Platforms/Android/Include"
-            ]
-          }
+          "soLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.52/libbsml.so",
+          "debugSoLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.52/debug_libbsml.so",
+          "overrideSoName": "libbsml.so",
+          "modLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.52/BSML.qmod",
+          "branchName": "version/v0_4_52",
+          "cmake": true
         }
       },
-      "version": "0.4.0"
+      "version": "0.4.52"
     },
     {
       "dependency": {
@@ -274,18 +273,19 @@
     },
     {
       "dependency": {
-        "id": "bsml",
-        "versionRange": "=0.4.51",
+        "id": "libil2cpp",
+        "versionRange": "=0.4.0",
         "additionalData": {
-          "soLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.51/libbsml.so",
-          "debugSoLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.51/debug_libbsml.so",
-          "overrideSoName": "libbsml.so",
-          "modLink": "https://github.com/bsq-ports/Quest-BSML/releases/download/v0.4.51/BSML.qmod",
-          "branchName": "version/v0_4_51",
-          "cmake": true
+          "headersOnly": true,
+          "compileOptions": {
+            "systemIncludes": [
+              "il2cpp/external/baselib/Include",
+              "il2cpp/external/baselib/Platforms/Android/Include"
+            ]
+          }
         }
       },
-      "version": "0.4.51"
+      "version": "0.4.0"
     }
   ]
 }
