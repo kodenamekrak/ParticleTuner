@@ -4,7 +4,7 @@
   "id": "${mod_id}",
   "author": "KodenameKRAK",
   "version": "${version}",
-  "packageVersion": "1.40.7_7060",
+  "packageVersion": "1.40.8_7379",
   "coverImage": "cover.gif",
   "description": "Lets you tweak individual particle settings! And has rainbow particles!",
   "dependencies": [],
