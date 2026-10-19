@@ -137,15 +137,15 @@ MAKE_HOOK_MATCH(ObstacleSaberSparkleEffect_Awake, &GlobalNamespace::ObstacleSabe
     }
 }
 
-void setup(CModInfo* info) {
+extern "C" __attribute__((visibility("default"))) void setup(CModInfo* info) {
     *info = modInfo.to_c();
 
     INFO("Completed setup!");
 }
 
 // Called later on in the game loading - a good time to install function hooks
-extern "C" void late_load() {
-    il2cpp_functions::Init();
+extern "C" __attribute__((visibility("default"))) void late_load() {
+    i2c::functions::initialize();
 
     getModConfig().Init(modInfo);
 
